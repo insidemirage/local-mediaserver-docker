@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Function to get local IP address
+# Function to get local IP address (без -P)
 get_local_ip() {
-    # Try different methods to get local IP
     if command -v ip &> /dev/null; then
-        ip -4 addr show | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | grep -v '127.0.0.1' | head -n1
+        # ip route get default может дать точнее, но проще взять первый не-local IP
+        ip -4 addr show | awk '/inet / {print $2}' | cut -d/ -f1 | grep -v '^127\.' | head -n1
     elif command -v ifconfig &> /dev/null; then
-        ifconfig | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | grep -v '127.0.0.1' | head -n1
+        ifconfig | awk '/inet / {print $2}' | grep -v '^127\.' | head -n1
     elif command -v hostname &> /dev/null; then
         hostname -I | awk '{print $1}'
     else
@@ -17,8 +17,6 @@ get_local_ip() {
 # Function to check internet connection
 check_internet() {
     echo "🌐 Checking internet connection..."
-    
-    # Try to ping Google DNS
     if ping -c 1 8.8.8.8 &> /dev/null; then
         echo "✅ Internet connection: OK"
         return 0
@@ -41,12 +39,6 @@ if [ "$LOCAL_IP" != "Unknown" ] && [ -n "$LOCAL_IP" ]; then
     echo "⚠️  WARNING: Don't forget to make this IP permanent in your router!"
     echo "   - Set DHCP reservation or static IP for: $LOCAL_IP"
     echo "   - Otherwise the IP might change after reboot"
-    echo "   - Access services via: http://$LOCAL_IP:8080 (QBittorrent)"
-    echo "                         http://$LOCAL_IP:8081 (Jellyfin)"
-    echo "                         http://$LOCAL_IP:8082 (Piwigo)"
-    echo "                         http://$LOCAL_IP:8083 (FileBrowser)"
-else
-    echo "⚠️  Could not determine local IP address"
 fi
 echo "================================="
 echo ""
@@ -74,22 +66,25 @@ mkdir -pv filebrowser/config
 # QBittorrent folder (if needed)
 mkdir -pv qbittorrent/config
 
+# Jellyfin folder (if needed)
+mkdir -pv jellyfin/config
+
 # Set permissions (just in case)
-chmod -R 755 films downloads storage piwigo mariadb filebrowser qbittorrent
+chmod -R 755 films downloads storage piwigo mariadb filebrowser qbittorrent jellyfin
 
 echo "Done! All folders created."
 echo ""
 echo "Created folders:"
-ls -la | grep -E "films|downloads|storage|piwigo|mariadb|filebrowser|qbittorrent"
+ls -la | grep -E "films|downloads|storage|piwigo|mariadb|filebrowser|qbittorrent|jellyfin"
 
 # Show full structure
 echo ""
 echo "Full folder structure:"
 if command -v tree &> /dev/null; then
-    tree -L 2 . | grep -E "films|downloads|storage|piwigo|mariadb|filebrowser|qbittorrent" --color=always
+    tree -L 2 . | grep -E "films|downloads|storage|piwigo|mariadb|filebrowser|qbittorrent|jellyfin" --color=always
 else
     echo "tree not installed, skipping..."
-    ls -R | grep -E "films|downloads|storage|piwigo|mariadb|filebrowser|qbittorrent"
+    ls -R | grep -E "films|downloads|storage|piwigo|mariadb|filebrowser|qbittorrent|jellyfin"
 fi
 
 # Create .env file only if it doesn't exist
@@ -221,29 +216,26 @@ fi
 echo ""
 echo "✅ Done! Containers are running."
 echo ""
-echo "🌐 Access URLs:"
-echo "   Local access:"
-echo "   - QBittorrent: http://localhost:8080"
-echo "   - Jellyfin: http://localhost:8081"
-echo "   - Piwigo: http://localhost:8082"
-echo "   - FileBrowser: http://localhost:8083"
-echo ""
 
+# Выводим только реальные IP-адреса для доступа в сети
 if [ "$LOCAL_IP" != "Unknown" ] && [ -n "$LOCAL_IP" ]; then
-    echo "   Network access:"
-    echo "   - QBittorrent: http://$LOCAL_IP:8080"
-    echo "   - Jellyfin: http://$LOCAL_IP:8081"
-    echo "   - Piwigo: http://$LOCAL_IP:8082"
-    echo "   - FileBrowser: http://$LOCAL_IP:8083"
+    echo "================================="
+    echo "🌐 Network access URLs:"
+    echo "================================="
+    echo "QBittorrent: http://$LOCAL_IP:8080"
+    echo "Jellyfin:    http://$LOCAL_IP:8081"
+    echo "Piwigo:      http://$LOCAL_IP:8082"
+    echo "FileBrowser: http://$LOCAL_IP:8083"
+    echo "================================="
     echo ""
-    echo "⚠️  IMPORTANT: Don't forget to make IP $LOCAL_IP permanent in your router!"
-    echo "   - Set DHCP reservation or static IP for this device"
-    echo "   - Otherwise the IP might change after reboot"
+    echo "⚠️  Закрепи IP $LOCAL_IP в роутере (DHCP reservation)"
+else
+    echo "❌ Не удалось определить локальный IP. Проверь сеть."
 fi
 
 echo ""
-echo "💡 Useful commands:"
-echo "   docker-compose logs -f    # View logs"
-echo "   docker-compose down       # Stop containers"
-echo "   docker-compose restart    # Restart containers"
-echo "   docker-compose ps         # Container status"
+echo "💡 Полезные команды:"
+echo "   docker-compose logs -f    # Посмотреть логи"
+echo "   docker-compose down       # Остановить контейнеры"
+echo "   docker-compose restart    # Перезапустить контейнеры"
+echo "   docker-compose ps         # Статус контейнеров"

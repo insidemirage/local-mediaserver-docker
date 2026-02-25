@@ -87,4 +87,3 @@ services:
       - PGID=0
       - TZ=Europe/Moscow
     restart: unless-stopped
-    command: --database=/database/filebrowser.db --config=/config/settings.json

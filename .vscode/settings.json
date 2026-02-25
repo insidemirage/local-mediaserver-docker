@@ -6,7 +6,9 @@
         "**/films": true,
         "**/piwigo": true,
         "**/qbittorrent": true,
-        "**/storage": true
+        "**/storage": true,
+        "**/jellyfin": true
+
     },
     "search.exclude": {
          "**/mariadb": true,
@@ -15,6 +17,8 @@
         "**/films": true,
         "**/piwigo": true,
         "**/qbittorrent": true,
-        "**/storage": true
+        "**/storage": true,
+        "**/jellyfin": true
+
     }
 }
