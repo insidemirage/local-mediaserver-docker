@@ -70,7 +70,7 @@ services:
     ports:
       - "8083:80"
     volumes:
-      - /:/srv
+      - ./:/srv
       - ./filebrowser/data:/database
       - ./filebrowser/config:/config
     environment:
