@@ -222,13 +222,18 @@ fi
 
 echo ""
 echo "✅ Done! Containers are running."
-echo ""
+echo "Getting qbittorrent password from logs..."
+
+# Get password from docker qbittorrent logs
+QBITTORRENT_PASSWORD=$(docker-compose logs qbittorrent 2>/dev/null | grep "The WebUI administrator password was not set" | tail -n1 | sed 's/.*session: //')
 
 if [ "$LOCAL_IP" != "Unknown" ] && [ -n "$LOCAL_IP" ]; then
     echo "================================="
     echo "🌐 Network access URLs (clickable):"
     echo "================================="
     echo -e "QBittorrent: $(clickable_url "http://$LOCAL_IP:8080" "http://$LOCAL_IP:8080")"
+    echo -e "             Login: admin"
+    echo -e "             Password: ${QBITTORRENT_PASSWORD:-Not found, check logs manually}"
     echo -e "Jellyfin:    $(clickable_url "http://$LOCAL_IP:8081" "http://$LOCAL_IP:8081")"
     echo -e "Piwigo:      $(clickable_url "http://$LOCAL_IP:8082" "http://$LOCAL_IP:8082")"
     echo -e "FileBrowser: $(clickable_url "http://$LOCAL_IP:8083" "http://$LOCAL_IP:8083")"
