@@ -1,13 +1,13 @@
 # 🎬 Home Media Server on Docker  
 [Russian version](./README_RU.MD)   
-**Stream, download, share — all in one box!**
+**Stream, store, share — all in one box!**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=flat&logo=docker&logoColor=white)](https://docker.com)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/insidemirage/local-mediaserver-docker/graphs/commit-activity)
 [![GitHub issues](https://img.shields.io/github/issues/insidemirage/local-mediaserver-docker)](https://github.com/insidemirage/local-mediaserver-docker/issues)
 
-> ✨ **Forget about subscriptions and headaches** — set up your personal Netflix, photo gallery, and torrent client on any machine in 5 minutes.
+> ✨ **Forget about headaches** — set up your personal media server, photo gallery, and file manager on any machine in 5 minutes.
 
 ---
 
@@ -34,7 +34,7 @@ The script automatically installs Docker, Docker Compose, and Git (if missing), 
 
 | Service | What it does | Port |
 |--------|-------------|------|
-| **QBittorrent** 🧲 | Downloads movies and music | 8080 |
+| **QBittorrent** 🧲 | Downloads files | 8080 |
 | **Jellyfin** 🎞️ | Your personal Netflix for your home collection | 8096 |
 | **Piwigo** 📸 | Modern photo gallery manager | 8082 |
 | **FileBrowser** 📁 | Web-based file explorer | 8083 |
@@ -87,7 +87,7 @@ chmod +x start_docker.sh
 
 ```
 📂 local-mediaserver-docker/
-├── 📀 films/               # Put your movies here (Jellyfin picks them up)
+├── 📀 films/               # Put your videos here (Jellyfin picks them up)
 ├── 📥 downloads/           # QBittorrent downloads go here
 ├── 🖼️ storage/              # Photos for Piwigo
 ├── ⚙️ piwigo/               # Photo gallery settings
@@ -104,7 +104,7 @@ chmod +x start_docker.sh
 
 ## 💡 Why This is Awesome?
 
-✅ **No monthly payments** — everything runs on your hardware  
+✅ **Full control** — everything runs on your hardware  
 ✅ **Privacy first** — your photos and watch history stay with you  
 ✅ **Dead simple** — even if you've never heard of Docker, the script does it all  
 ✅ **Extendable** — want to add Nextcloud or Plex? Easy with Docker!  
@@ -168,5 +168,7 @@ A GitHub star, a pull request, or just a kind word — all welcome!
 [GitHub Repository](https://github.com/insidemirage/local-mediaserver-docker)
 
 ---
+
+*Note: This project is intended for legal use only. The author does not endorse or support piracy. Users are responsible for complying with applicable laws.*
 
 **Enjoy your movie night!** 🍿📽️

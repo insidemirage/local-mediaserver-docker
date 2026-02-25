@@ -1,12 +1,12 @@
 # 🎬 Домашний медиа-сервер на Docker  
-**Стримь, качай, делись — всё в одном флаконе!**
+**Стримь, храни, делись — всё в одном флаконе!**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=flat&logo=docker&logoColor=white)](https://docker.com)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/insidemirage/local-mediaserver-docker/graphs/commit-activity)
 [![GitHub issues](https://img.shields.io/github/issues/insidemirage/local-mediaserver-docker)](https://github.com/insidemirage/local-mediaserver-docker/issues)
 
-> ✨ **Забудь про подписки и заморочки** — подними свой личный Netflix, фотоальбом и торрент-качалку на любом компе за 5 минут.
+> ✨ **Забудь про заморочки** — подними свой личный медиа-сервер, фотоальбом и файловый менеджер на любом компе за 5 минут.
 
 ---
 
@@ -33,7 +33,7 @@ wget -qO- https://raw.githubusercontent.com/insidemirage/local-mediaserver-docke
 
 | Сервис | Зачем нужен | Порт |
 |--------|-------------|------|
-| **QBittorrent** 🧲 | Качает фильмы и музыку | 8080 |
+| **QBittorrent** 🧲 | Скачивает файлы | 8080 |
 | **Jellyfin** 🎞️ | Твой личный Netflix для домашней коллекции | 8096 |
 | **Piwigo** 📸 | Фотоальбом, как у бабушки, только современный | 8082 |
 | **FileBrowser** 📁 | Заходишь по браузеру и ковыряешься в файлах | 8083 |
@@ -86,7 +86,7 @@ chmod +x start_docker.sh
 
 ```
 📂 local-mediaserver-docker/
-├── 📀 films/               # Сюда складывай фильмы (Jellyfin их подхватит)
+├── 📀 films/               # Сюда складывай видео (Jellyfin их подхватит)
 ├── 📥 downloads/           # QBittorrent будет качать сюда
 ├── 🖼️ storage/              # Фотки для Piwigo
 ├── ⚙️ piwigo/               # Настройки фотоальбома
@@ -103,7 +103,7 @@ chmod +x start_docker.sh
 
 ## 💡 Почему это круто?
 
-✅ **Никаких ежемесячных платежей** — всё твоё и работает на твоём железе.  
+✅ **Полный контроль** — всё твоё и работает на твоём железе.  
 ✅ **Конфиденциальность** — твои фотки и просмотры не уходят в облака.  
 ✅ **Простота** — даже если ты впервые слышишь про Docker, скрипт сделает всё сам.  
 ✅ **Расширяемость** — хочешь добавить Nextcloud или Plex? Легко, докер же!  
@@ -167,5 +167,7 @@ docker-compose up -d
 [Репозиторий на GitHub](https://github.com/insidemirage/local-mediaserver-docker)
 
 ---
+
+*Примечание: Этот проект предназначен только для законного использования. Автор не поддерживает и не поощряет пиратство. Пользователи несут ответственность за соблюдение применимых законов.*
 
 **Приятного просмотра!** 🍿📽️
