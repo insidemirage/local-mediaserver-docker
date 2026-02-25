@@ -1,5 +1,5 @@
 # 🎬 Home Media Server on Docker  
-[Russian version](./README_RU.MD)
+[Russian version](./README_RU.MD)   
 **Stream, download, share — all in one box!**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -69,6 +69,17 @@ cd local-mediaserver-docker
 chmod +x start_docker.sh
 ./start_docker.sh
 ```
+
+---
+
+## 🔧 System Requirements
+
+- **Operating System**: Ubuntu 20.04+, Debian 11+, CentOS 7+, or any Linux distribution with Docker support
+- **RAM**: 
+  - **Minimum**: 1 GB (tested on Orange Pi Zero 3 with 2 GB total, using ~530 MB at idle)
+  - **Recommended**: 2 GB+ for smooth operation with multiple concurrent users or transcoding
+- **Storage**: Depends on your media collection (at least 10 GB free for Docker images and basic data)
+- **Architecture**: x86_64 (AMD64) or ARM64 (Raspberry Pi, Orange Pi, etc.)
 
 ---
 
@@ -142,14 +153,6 @@ docker-compose up -d
 
 **…installation failed halfway?**  
 → It happens — just run `./start_docker.sh` again.
-
----
-
-## 📸 Screenshots
-
-| Jellyfin | QBittorrent |
-|----------|-------------|
-| ![Jellyfin](https://jellyfin.org/images/screenshot-slide1.jpg) | ![QBittorrent](https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Qbittorrent_v4.3.9_screenshot.png/800px-Qbittorrent_v4.3.9_screenshot.png) |
 
 ---
 

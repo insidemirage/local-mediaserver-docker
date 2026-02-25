@@ -1,5 +1,5 @@
 # 🎬 Домашний медиа-сервер на Docker  
-**Стримь, качай, делись — всё в одном флаконе!**  
+**Стримь, качай, делись — всё в одном флаконе!**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=flat&logo=docker&logoColor=white)](https://docker.com)
@@ -25,7 +25,7 @@ wget -qO- https://raw.githubusercontent.com/insidemirage/local-mediaserver-docke
 ```
 
 **Что произойдёт?**  
-Скрипт сам поставит Docker, Docker Compose, Git, скачает всё нужное и запустит сервер. Ты даже кофе не успеешь допить ☕.
+Скрипт сам поставит Docker, Docker Compose, Git (если нужно), скачает репозиторий и запустит медиа-сервер. Ты даже кофе не успеешь допить ☕.
 
 ---
 
@@ -71,7 +71,18 @@ chmod +x start_docker.sh
 
 ---
 
-## 📁 Что упадёт в папку?
+## 🔧 Системные требования
+
+- **Операционная система**: Ubuntu 20.04+, Debian 11+, CentOS 7+ или любой Linux-дистрибутив с поддержкой Docker
+- **ОЗУ**: 
+  - **Минимум**: 1 ГБ (протестировано на Orange Pi Zero 3 с 2 ГБ, используется ~530 МБ в простое)
+  - **Рекомендуется**: от 2 ГБ для комфортной работы с несколькими пользователями или транскодингом
+- **Диск**: Зависит от размера вашей медиатеки (минимум 10 ГБ свободно для образов Docker и базовых данных)
+- **Архитектура**: x86_64 (AMD64) или ARM64 (Raspberry Pi, Orange Pi и т.д.)
+
+---
+
+## 📁 Структура папок
 
 ```
 📂 local-mediaserver-docker/
@@ -141,16 +152,6 @@ docker-compose up -d
 
 **…установка оборвалась**  
 → Бывает, просто запусти `./start_docker.sh` ещё раз.
-
----
-
-## 📸 Скриншоты (как это выглядит)
-
-*(Тут были бы картинки, но GitHub их не любит, так что поверь на слово — красиво!)*
-
-| Jellyfin | QBittorrent |
-|----------|-------------|
-| ![Jellyfin](https://jellyfin.org/images/screenshot-slide1.jpg) | ![QBittorrent](https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Qbittorrent_v4.3.9_screenshot.png/800px-Qbittorrent_v4.3.9_screenshot.png) |
 
 ---
 
