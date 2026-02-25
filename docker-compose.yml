@@ -12,6 +12,7 @@ services:
       - WEBUI_USERNAME=${USER_LOGIN}
       - WEBUI_PASSWORD=${USER_PASSWORD}
     volumes:
+      - ./qbittorrent/config:/config
       - ./films:/downloads
       - ./downloads:/other
     ports:
@@ -28,6 +29,7 @@ services:
       - PGID=1000
       - TZ=Europe/Moscow
     volumes:
+      - ./jellyfin/config:/config
       - ./films:/media
     ports:
       - "8096:8096"

@@ -1,0 +1,20 @@
+{
+    "files.exclude": {
+        "**/mariadb": true,
+        "**/downloads": true,
+        "**/filebrowser": true,
+        "**/films": true,
+        "**/piwigo": true,
+        "**/qbittorrent": true,
+        "**/storage": true
+    },
+    "search.exclude": {
+         "**/mariadb": true,
+        "**/downloads": true,
+        "**/filebrowser": true,
+        "**/films": true,
+        "**/piwigo": true,
+        "**/qbittorrent": true,
+        "**/storage": true
+    }
+}
