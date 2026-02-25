@@ -54,7 +54,6 @@ services:
       - MYSQL_PASSWORD=${DB_PASS}
     restart: unless-stopped
     command: |
-      --config=/config/settings.json
       --username=${USER_LOGIN}
       --password=${USER_PASSWORD}  # Смените на свой пароль
     depends_on:
