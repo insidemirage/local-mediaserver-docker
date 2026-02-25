@@ -189,6 +189,7 @@ fi
 
 echo "⚠️ Временный пароль для входа в qBittorrent: $QBITTORRENT_PASSWORD"
 echo "❌ Если не удалось найти, запусти docker-compose logs qbittorrent и посмотри сам"
+echo "⚠️ СМЕНА ПАРОЛЯ В qbittorrent обязательна, иначе при каждом запуске он будет меняться"
 
 echo ""
 echo "📋 CREDENTIALS:"

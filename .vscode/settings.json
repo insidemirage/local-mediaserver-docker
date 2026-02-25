@@ -5,7 +5,6 @@
         "**/filebrowser": true,
         "**/films": true,
         "**/piwigo": true,
-        "**/qbittorrent": true,
         "**/storage": true,
         "**/jellyfin": true
 
@@ -16,7 +15,6 @@
         "**/filebrowser": true,
         "**/films": true,
         "**/piwigo": true,
-        "**/qbittorrent": true,
         "**/storage": true,
         "**/jellyfin": true
 
