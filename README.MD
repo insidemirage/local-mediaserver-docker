@@ -1,32 +1,67 @@
-Вот обновленный README.md с правильным синтаксисом установки:
+# 🎬 Home Media Server on Docker  
+[Russian version](./README_RU.MD)
+**Stream, download, share — all in one box!**
 
-# Local Media Server Docker Stack
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=flat&logo=docker&logoColor=white)](https://docker.com)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/insidemirage/local-mediaserver-docker/graphs/commit-activity)
+[![GitHub issues](https://img.shields.io/github/issues/insidemirage/local-mediaserver-docker)](https://github.com/insidemirage/local-mediaserver-docker/issues)
 
-A complete, self-hosted media server solution powered by Docker. Transform any machine into a powerful home media center with media downloading, streaming, photo management, and file sharing capabilities.
+> ✨ **Forget about subscriptions and headaches** — set up your personal Netflix, photo gallery, and torrent client on any machine in 5 minutes.
 
-## 🚀 One-Line Installation
+---
 
-Install everything with a single command:
+## 🚀 One Command — And You're Done
 
-### Using curl
+Just copy-paste this into your terminal and watch the magic happen:
+
+### With curl
 ```bash
 curl -sSL https://raw.githubusercontent.com/insidemirage/local-mediaserver-docker/main/install.sh | bash
 ```
 
-### Using wget
+### With wget
 ```bash
 wget -qO- https://raw.githubusercontent.com/insidemirage/local-mediaserver-docker/main/install.sh | bash
 ```
 
-The installer will automatically:
-- Check for Docker and Docker Compose (install if missing)
-- Check for Git (install if missing)
-- Clone the repository
-- Start all services immediately
+**What happens next?**  
+The script automatically installs Docker, Docker Compose, and Git (if missing), clones the repository, and starts your media server. You won't even finish your coffee ☕.
 
-## 📦 Manual Installation
+---
 
-If you prefer to install manually:
+## 📦 What's Inside?
+
+| Service | What it does | Port |
+|--------|-------------|------|
+| **QBittorrent** 🧲 | Downloads movies and music | 8080 |
+| **Jellyfin** 🎞️ | Your personal Netflix for your home collection | 8096 |
+| **Piwigo** 📸 | Modern photo gallery manager | 8082 |
+| **FileBrowser** 📁 | Web-based file explorer | 8083 |
+| **MariaDB** 🐬 | Database backend for photos (quietly does its job) | — |
+
+---
+
+## 🖥️ How to Use It?
+
+After startup, the server will display your local IP (something like `192.168.1.xxx`).  
+Just open a browser on any device in your network and enter:
+
+```
+QBittorrent → http://192.168.1.xxx:8080
+Jellyfin    → http://192.168.1.xxx:8096
+Piwigo      → http://192.168.1.xxx:8082
+FileBrowser → http://192.168.1.xxx:8083
+```
+
+**Default login everywhere:** `admin`  
+**Password:** randomly generated and shown in the terminal (write it down or take a photo before closing the terminal!).
+
+---
+
+## 🔧 Manual Installation (For Perfectionists)
+
+If you prefer to do things yourself:
 
 ```bash
 git clone https://github.com/insidemirage/local-mediaserver-docker.git
@@ -35,85 +70,56 @@ chmod +x start_docker.sh
 ./start_docker.sh
 ```
 
-## 🔧 System Requirements
+---
 
-- **Operating System**: Ubuntu 20.04+, Debian 11+, CentOS 7+, or any Linux distribution with Docker support
-- **RAM**: Minimum 2GB (4GB+ recommended)
-- **Storage**: Depends on your media collection
-- **Architecture**: x86_64 (AMD64) or ARM64
-
-## 📋 Services Included
-
-| Service | Description | Port |
-|---------|-------------|------|
-| **QBittorrent** | BitTorrent client for downloading | 8080 |
-| **Jellyfin** | Media streaming server | 8096 |
-| **Piwigo** | Photo gallery management | 8082 |
-| **FileBrowser** | Web-based file manager | 8083 |
-| **MariaDB** | Database for Piwigo | Internal |
-
-## 🌐 Access After Installation
-
-Once the installation completes, you can access your services at:
+## 📁 Folder Structure
 
 ```
-QBittorrent: http://YOUR_SERVER_IP:8080
-Jellyfin:    http://YOUR_SERVER_IP:8096
-Piwigo:      http://YOUR_SERVER_IP:8082
-FileBrowser: http://YOUR_SERVER_IP:8083
+📂 local-mediaserver-docker/
+├── 📀 films/               # Put your movies here (Jellyfin picks them up)
+├── 📥 downloads/           # QBittorrent downloads go here
+├── 🖼️ storage/              # Photos for Piwigo
+├── ⚙️ piwigo/               # Photo gallery settings
+├── 🗄️ mariadb/data/         # Database files
+├── 📂 filebrowser/          # File manager data
+├── ⚙️ qbittorrent/config/   # Torrent client configs
+├── ⚙️ jellyfin/config/      # Media server configs
+├── 🐳 docker-compose.yml     # Container definitions
+├── 🚀 start_docker.sh        # Launcher script
+└── 📦 install.sh             # One-line installer
 ```
 
-The installer will display your actual IP address and these URLs at the end of the installation process.
+---
 
-## 🔒 First-Time Login Credentials
+## 💡 Why This is Awesome?
 
-During the first run, the system generates random passwords for all services. These credentials are displayed only once in the terminal. **Save them in a secure place!**
+✅ **No monthly payments** — everything runs on your hardware  
+✅ **Privacy first** — your photos and watch history stay with you  
+✅ **Dead simple** — even if you've never heard of Docker, the script does it all  
+✅ **Extendable** — want to add Nextcloud or Plex? Easy with Docker!  
+✅ **Runs on anything** — Pentium, Raspberry Pi, old laptop — all good  
 
-Default login for all services: `admin`
+---
 
-## ⚠️ Important Notes
+## ⚠️ Important Details
 
-- **Network Configuration**: Make sure your server has a static IP or DHCP reservation in your router to prevent address changes after reboot
-- **Firewall**: Ensure the required ports are open if you have a firewall enabled
-- **Storage**: Media files are stored in the `films/` and `downloads/` directories
-- **Docker Group**: If Docker was just installed, you may need to log out and back in for group changes to take effect, or run `newgrp docker`
+- 🔒 **Make your IP static** — set DHCP reservation in your router so the address doesn't change after reboot
+- 🔥 **Open ports** in your firewall (8080, 8096, 8082, 8083) if you want access from the internet (but be careful with security)
+- 👥 **Docker group** — if Docker was just installed, log out and back in, or run `newgrp docker` to avoid typing sudo
 
-## 📁 Directory Structure
-
-```
-local-mediaserver-docker/
-├── films/              # Media files for Jellyfin
-├── downloads/          # Download directory for QBittorrent
-├── storage/            # Photo storage for Piwigo
-├── piwigo/             # Piwigo configuration
-├── mariadb/
-│   └── data/          # Database files
-├── filebrowser/
-│   ├── data/          # FileBrowser database
-│   └── config/        # FileBrowser settings
-├── qbittorrent/
-│   └── config/        # QBittorrent configuration
-├── jellyfin/
-│   └── config/        # Jellyfin configuration
-├── docker-compose.yml  # Docker services configuration
-├── start_docker.sh     # Main startup script
-└── install.sh         # One-line installer
-```
+---
 
 ## 🛠️ Useful Commands
 
 ```bash
-# View logs
+# View all container logs
 docker-compose logs -f
 
-# Stop all containers
+# Stop everything
 docker-compose down
 
-# Restart all containers
+# Restart all services
 docker-compose restart
-
-# Check container status
-docker-compose ps
 
 # Update to latest versions
 git pull
@@ -121,35 +127,43 @@ docker-compose pull
 docker-compose up -d
 ```
 
-## ❓ Troubleshooting
+---
 
-**Docker permission denied?**
-```bash
-# Log out and log back in, or run:
-newgrp docker
-```
+## 🆘 Troubleshooting
 
-**Ports already in use?**
-Change the port mappings in `docker-compose.yml` before starting.
+**…getting "permission denied"?**  
+→ Run `newgrp docker` or log out and back in.
 
-**Can't access services from other devices?**
-- Check firewall settings
-- Verify the IP address is correct
-- Ensure devices are on the same network
+**…ports already in use?**  
+→ Edit `docker-compose.yml` and change the left port (e.g., `8080:8080` → `8085:8080`).
 
-**Installation script fails?**
-- Make sure curl or wget is installed
-- Try manual installation method
-- Check your internet connection
+**…can't access from other devices?**  
+→ Check IP address, firewall, and make sure devices are on the same network.
 
-## 📝 License
-
-This project is open-source and available under the MIT License.
-
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome!
+**…installation failed halfway?**  
+→ It happens — just run `./start_docker.sh` again.
 
 ---
 
-**Enjoy your personal media server!** 🎬📸🎵
+## 📸 Screenshots
+
+| Jellyfin | QBittorrent |
+|----------|-------------|
+| ![Jellyfin](https://jellyfin.org/images/screenshot-slide1.jpg) | ![QBittorrent](https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Qbittorrent_v4.3.9_screenshot.png/800px-Qbittorrent_v4.3.9_screenshot.png) |
+
+---
+
+## 📝 License
+
+MIT License — do whatever you want with it, even sell it (but sharing with a friend is cooler).
+
+---
+
+## 🤗 Want to Contribute?
+
+A GitHub star, a pull request, or just a kind word — all welcome!  
+[GitHub Repository](https://github.com/insidemirage/local-mediaserver-docker)
+
+---
+
+**Enjoy your movie night!** 🍿📽️
