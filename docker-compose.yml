@@ -37,7 +37,8 @@ services:
     restart: unless-stopped
 
   piwigo:
-    image: piwigo/piwigo:latest
+ #   image: piwigo/piwigo:latest
+    image: lscr.io/linuxserver/piwigo:latest
     container_name: piwigo
     ports:
       - "8082:80"
@@ -53,9 +54,6 @@ services:
       - MYSQL_USER=${DB_LOGIN}
       - MYSQL_PASSWORD=${DB_PASS}
     restart: unless-stopped
-    command: |
-      --username=${USER_LOGIN}
-      --password=${USER_PASSWORD}  # Смените на свой пароль
     depends_on:
       - mariadb
 
