@@ -114,23 +114,19 @@ else
     echo "⚠️  .env file already exists. Using existing settings."
     
     # Check if variables exist
-    if grep -q "USER_LOGIN" .env; then
-    else
+    if ! grep -q "USER_LOGIN" .env; then
         echo "⚠️ USER_LOGIN not found in .env"
     fi
-    
-    if grep -q "USER_PASSWORD" .env; then
-    else
+
+    if ! grep -q "USER_PASSWORD" .env; then
         echo "⚠️ USER_PASSWORD not found in .env"
     fi
-    
-    if grep -q "DB_ROOT_PASS" .env; then
-    else
+
+    if ! grep -q "DB_ROOT_PASS" .env; then
         echo "⚠️ DB_ROOT_PASS not found in .env"
     fi
-    
-    if grep -q "DB_PASS" .env; then
-    else
+
+    if ! grep -q "DB_PASS" .env; then
         echo "⚠️ DB_PASS not found in .env"
     fi
     
