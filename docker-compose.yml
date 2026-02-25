@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Europe/Moscow
+      - WEBUI_PORT=8080
+      - WEBUI_USERNAME=${USER_LOGIN}
+      - WEBUI_PASSWORD=${USER_PASSWORD}
+    volumes:
+      - ./films:/downloads
+      - ./downloads:/other
+    ports:
+      - "8080:8080"
+      - "6881:6881"
+      - "6881:6881/udp"
+    restart: unless-stopped
+
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Moscow
+    volumes:
+      - ./films:/media
+    ports:
+      - "8096:8096"
+      - "8920:8920"
+    restart: unless-stopped
+
+  piwigo:
+    image: piwigo/piwigo:latest
+    container_name: piwigo
+    ports:
+      - "8082:80"
+    volumes:
+      - ./storage:/var/www/html/galleries
+      - ./piwigo:/var/www/html/local
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Moscow
+      - MYSQL_HOST=mariadb
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_LOGIN}
+      - MYSQL_PASSWORD=${DB_PASS}
+    restart: unless-stopped
+    command: |
+      --database=/database/filebrowser.db
+      --config=/config/settings.json
+      --username=${USER_LOGIN}
+      --password=${USER_PASSWORD}  # Смените на свой пароль
+    depends_on:
+      - mariadb
+
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASS}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_LOGIN}
+      - MYSQL_PASSWORD=${DB_PASS}
+    volumes:
+      - ./mariadb/data:/var/lib/mysql
+    restart: always
+
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    container_name: filebrowser
+    ports:
+      - "8083:80"
+    volumes:
+      - /:/srv
+      - ./filebrowser/data:/database
+      - ./filebrowser/config:/config
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Europe/Moscow
+    restart: unless-stopped
+    command: --database=/database/filebrowser.db --config=/config/settings.json
