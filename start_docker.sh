@@ -14,12 +14,6 @@ get_local_ip() {
     fi
 }
 
-# Function to make URL clickable
-clickable_url() {
-    local text="$1"
-    local url="$2"
-    echo -e "\e]8;;$url\e\\$text\e]8;;\e\\"
-}
 
 # Function to check internet connection
 check_internet() {
