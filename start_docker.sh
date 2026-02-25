@@ -14,6 +14,13 @@ get_local_ip() {
     fi
 }
 
+# Function to make URL clickable
+clickable_url() {
+    local text="$1"
+    local url="$2"
+    echo -e "\e]8;;$url\e\\$text\e]8;;\e\\"
+}
+
 # Function to check internet connection
 check_internet() {
     echo "🌐 Checking internet connection..."
@@ -217,18 +224,24 @@ echo ""
 echo "✅ Done! Containers are running."
 echo ""
 
-# Выводим только реальные IP-адреса для доступа в сети
 if [ "$LOCAL_IP" != "Unknown" ] && [ -n "$LOCAL_IP" ]; then
     echo "================================="
-    echo "🌐 Network access URLs:"
+    echo "🌐 Network access URLs (clickable):"
     echo "================================="
-    echo "QBittorrent: http://$LOCAL_IP:8080"
-    echo "Jellyfin:    http://$LOCAL_IP:8081"
-    echo "Piwigo:      http://$LOCAL_IP:8082"
-    echo "FileBrowser: http://$LOCAL_IP:8083"
+    echo -e "QBittorrent: $(clickable_url "http://$LOCAL_IP:8080" "http://$LOCAL_IP:8080")"
+    echo -e "Jellyfin:    $(clickable_url "http://$LOCAL_IP:8081" "http://$LOCAL_IP:8081")"
+    echo -e "Piwigo:      $(clickable_url "http://$LOCAL_IP:8082" "http://$LOCAL_IP:8082")"
+    echo -e "FileBrowser: $(clickable_url "http://$LOCAL_IP:8083" "http://$LOCAL_IP:8083")"
     echo "================================="
     echo ""
     echo "⚠️  Закрепи IP $LOCAL_IP в роутере (DHCP reservation)"
+    
+    echo ""
+    echo "📋 Plain URLs (copy-paste):"
+    echo "http://$LOCAL_IP:8080"
+    echo "http://$LOCAL_IP:8081"
+    echo "http://$LOCAL_IP:8082"
+    echo "http://$LOCAL_IP:8083"
 else
     echo "❌ Не удалось определить локальный IP. Проверь сеть."
 fi
