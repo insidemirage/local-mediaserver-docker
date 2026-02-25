@@ -80,19 +80,6 @@ mkdir -pv jellyfin/config
 chmod -R 755 films downloads storage piwigo mariadb filebrowser qbittorrent jellyfin
 
 echo "Done! All folders created."
-echo ""
-echo "Created folders:"
-ls -la | grep -E "films|downloads|storage|piwigo|mariadb|filebrowser|qbittorrent|jellyfin"
-
-# Show full structure
-echo ""
-echo "Full folder structure:"
-if command -v tree &> /dev/null; then
-    tree -L 2 . | grep -E "films|downloads|storage|piwigo|mariadb|filebrowser|qbittorrent|jellyfin" --color=always
-else
-    echo "tree not installed, skipping..."
-    ls -R | grep -E "films|downloads|storage|piwigo|mariadb|filebrowser|qbittorrent|jellyfin"
-fi
 
 # Create .env file only if it doesn't exist
 if [ ! -f .env ]; then
@@ -122,64 +109,31 @@ EOF
     echo "✅ .env file created with random passwords"
     
     # Show saved credentials
-    echo ""
-    echo "📋 CREDENTIALS:"
-    echo "================================="
-    echo "FileBrowser, QBittorrent, Piwigo login: $(grep USER_LOGIN .env | cut -d'=' -f2)"
-    echo "FileBrowser, QBittorrent, Piwigo password: $(grep USER_PASSWORD .env | cut -d'=' -f2)"
-    echo "---------------------------------"
-    echo "DB Root Password: $(grep DB_ROOT_PASS .env | cut -d'=' -f2)"
-    echo "DB Piwigo Password: $(grep DB_PASS .env | cut -d'=' -f2)"
-    echo "DB Login: $(grep DB_LOGIN .env | cut -d'=' -f2)"
-    echo "DB Name: $(grep DB_NAME .env | cut -d'=' -f2)"
-    echo "================================="
-    echo ""
-    echo "⚠️  Save these credentials in a secure place!"
     
 else
     echo "⚠️  .env file already exists. Using existing settings."
     
-    # Show existing credentials
-    echo ""
-    echo "📋 Current credentials from .env:"
-    echo "================================="
-    
     # Check if variables exist
     if grep -q "USER_LOGIN" .env; then
-        echo "FileBrowser, QBittorrent, Piwigo login: $(grep USER_LOGIN .env | cut -d'=' -f2)"
     else
         echo "⚠️ USER_LOGIN not found in .env"
     fi
     
     if grep -q "USER_PASSWORD" .env; then
-        echo "FileBrowser, QBittorrent, Piwigo password: $(grep USER_PASSWORD .env | cut -d'=' -f2)"
     else
         echo "⚠️ USER_PASSWORD not found in .env"
     fi
     
-    echo "---------------------------------"
-    
     if grep -q "DB_ROOT_PASS" .env; then
-        echo "DB Root Password: $(grep DB_ROOT_PASS .env | cut -d'=' -f2)"
     else
         echo "⚠️ DB_ROOT_PASS not found in .env"
     fi
     
     if grep -q "DB_PASS" .env; then
-        echo "DB Piwigo Password: $(grep DB_PASS .env | cut -d'=' -f2)"
     else
         echo "⚠️ DB_PASS not found in .env"
     fi
     
-    if grep -q "DB_LOGIN" .env; then
-        echo "DB Login: $(grep DB_LOGIN .env | cut -d'=' -f2)"
-    fi
-    
-    if grep -q "DB_NAME" .env; then
-        echo "DB Name: $(grep DB_NAME .env | cut -d'=' -f2)"
-    fi
-    
-    echo "================================="
 fi
 
 # Check if docker-compose.yml exists
@@ -227,33 +181,35 @@ echo "Getting qbittorrent password from logs..."
 # Get password from docker qbittorrent logs
 QBITTORRENT_PASSWORD=$(docker-compose logs qbittorrent 2>/dev/null | grep "The WebUI administrator password was not set" | tail -n1 | sed 's/.*session: //')
 
+QBITTORRENT_PASSWORD:-Not found, check logs manually
 if [ "$LOCAL_IP" != "Unknown" ] && [ -n "$LOCAL_IP" ]; then
     echo "================================="
     echo "🌐 Network access URLs (clickable):"
     echo "================================="
-    echo -e "QBittorrent: $(clickable_url "http://$LOCAL_IP:8080" "http://$LOCAL_IP:8080")"
-    echo -e "             Login: admin"
-    echo -e "             Password: ${QBITTORRENT_PASSWORD:-Not found, check logs manually}"
-    echo -e "Jellyfin:    $(clickable_url "http://$LOCAL_IP:8081" "http://$LOCAL_IP:8081")"
-    echo -e "Piwigo:      $(clickable_url "http://$LOCAL_IP:8082" "http://$LOCAL_IP:8082")"
-    echo -e "FileBrowser: $(clickable_url "http://$LOCAL_IP:8083" "http://$LOCAL_IP:8083")"
+    echo -e "QBittorrent: http://$LOCAL_IP:8080"
+    echo -e "Jellyfin:    http://$LOCAL_IP:8081"
+    echo -e "Piwigo:      http://$LOCAL_IP:8082"
+    echo -e "FileBrowser: http://$LOCAL_IP:8083"
     echo "================================="
     echo ""
     echo "⚠️  Закрепи IP $LOCAL_IP в роутере (DHCP reservation)"
-    
-    echo ""
-    echo "📋 Plain URLs (copy-paste):"
-    echo "http://$LOCAL_IP:8080"
-    echo "http://$LOCAL_IP:8081"
-    echo "http://$LOCAL_IP:8082"
-    echo "http://$LOCAL_IP:8083"
 else
     echo "❌ Не удалось определить локальный IP. Проверь сеть."
 fi
 
+echo "⚠️ Временный пароль для входа в qBittorrent: $QBITTORRENT_PASSWORD"
+echo "❌ Если не удалось найти, запусти docker-compose logs qbittorrent и посмотри сам"
+
 echo ""
-echo "💡 Полезные команды:"
-echo "   docker-compose logs -f    # Посмотреть логи"
-echo "   docker-compose down       # Остановить контейнеры"
-echo "   docker-compose restart    # Перезапустить контейнеры"
-echo "   docker-compose ps         # Статус контейнеров"
+echo "📋 CREDENTIALS:"
+echo "================================="
+echo "FileBrowser, QBittorrent, Piwigo login: $(grep USER_LOGIN .env | cut -d'=' -f2)"
+echo "FileBrowser, QBittorrent, Piwigo password: $(grep USER_PASSWORD .env | cut -d'=' -f2)"
+echo "---------------------------------"
+echo "DB Root Password: $(grep DB_ROOT_PASS .env | cut -d'=' -f2)"
+echo "DB Piwigo Password: $(grep DB_PASS .env | cut -d'=' -f2)"
+echo "DB Login: $(grep DB_LOGIN .env | cut -d'=' -f2)"
+echo "DB Name: $(grep DB_NAME .env | cut -d'=' -f2)"
+echo "================================="
+echo ""
+echo "⚠️  Save these credentials in a secure place!"
