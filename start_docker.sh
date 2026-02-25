@@ -72,7 +72,7 @@ mkdir -pv qbittorrent/config
 mkdir -pv jellyfin/config
 
 # Set permissions (just in case)
-chmod -R 755 films downloads storage piwigo mariadb filebrowser qbittorrent jellyfin
+chmod -R 777 films downloads storage piwigo mariadb filebrowser qbittorrent jellyfin
 
 echo "Done! All folders created."
 
