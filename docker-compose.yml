@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   qbittorrent:
@@ -37,7 +37,6 @@ services:
     restart: unless-stopped
 
   piwigo:
- #   image: piwigo/piwigo:latest
     image: lscr.io/linuxserver/piwigo:latest
     container_name: piwigo
     ports:
@@ -49,10 +48,6 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Moscow
-      - MYSQL_HOST=mariadb
-      - MYSQL_DATABASE=${DB_NAME}
-      - MYSQL_USER=${DB_LOGIN}
-      - MYSQL_PASSWORD=${DB_PASS}
     restart: unless-stopped
     depends_on:
       - mariadb

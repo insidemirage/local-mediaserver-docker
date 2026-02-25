@@ -15,20 +15,6 @@ get_local_ip() {
 }
 
 
-# Function to check internet connection
-# 
-check_internet() {
-    echo "🌐 Checking internet connection..."
-    if ping -c 1 8.8.8.8 &> /dev/null; then
-        echo "✅ Internet connection: OK"
-        return 0
-    else
-        echo "❌ Internet connection: FAILED"
-        echo "⚠️  Some services may not work properly without internet"
-        return 1
-    fi
-}
-
 # Get local IP
 LOCAL_IP=$(get_local_ip)
 
@@ -43,10 +29,6 @@ if [ "$LOCAL_IP" != "Unknown" ] && [ -n "$LOCAL_IP" ]; then
     echo "   - Otherwise the IP might change after reboot"
 fi
 echo "================================="
-echo ""
-
-# Check internet
-check_internet
 echo ""
 
 # Create all necessary folders in the current directory
@@ -79,18 +61,13 @@ echo "Done! All folders created."
 # Create .env file only if it doesn't exist
 if [ ! -f .env ]; then
     echo "Creating .env file with passwords..."
-    
+
     # Generate random passwords (10 characters)
-    USER_PASSWORD=$(openssl rand -base64 32 | tr -dc 'a-zA-Z0-9' | head -c 10)
     DB_ROOT_PASS=$(openssl rand -base64 32 | tr -dc 'a-zA-Z0-9' | head -c 10)
     DB_PASS=$(openssl rand -base64 32 | tr -dc 'a-zA-Z0-9' | head -c 10)
-    
+
     # Create .env file
     cat > .env << EOF
-# FileBrowser credentials
-USER_LOGIN=admin
-USER_PASSWORD=$USER_PASSWORD
-
 # Database credentials
 DB_ROOT_PASS=$DB_ROOT_PASS
 DB_PASS=$DB_PASS
@@ -102,21 +79,11 @@ TZ=Europe/Moscow
 EOF
 
     echo "✅ .env file created with random passwords"
-    
-    # Show saved credentials
-    
+
 else
     echo "⚠️  .env file already exists. Using existing settings."
-    
+
     # Check if variables exist
-    if ! grep -q "USER_LOGIN" .env; then
-        echo "⚠️ USER_LOGIN not found in .env"
-    fi
-
-    if ! grep -q "USER_PASSWORD" .env; then
-        echo "⚠️ USER_PASSWORD not found in .env"
-    fi
-
     if ! grep -q "DB_ROOT_PASS" .env; then
         echo "⚠️ DB_ROOT_PASS not found in .env"
     fi
@@ -124,7 +91,7 @@ else
     if ! grep -q "DB_PASS" .env; then
         echo "⚠️ DB_PASS not found in .env"
     fi
-    
+
 fi
 
 # Check if docker-compose.yml exists
@@ -149,30 +116,23 @@ echo ""
 echo "🚀 Starting Docker containers..."
 docker-compose up -d
 
-# Check containers status
-echo ""
-echo "📊 Containers status:"
-docker-compose ps
+echo "Waiting for containers to initialize..."
+sleep 3
 
-# Show used ports
-echo ""
-echo "🔌 Used ports:"
-if command -v ss &> /dev/null; then
-    ss -tulpn | grep -E ":(8080|8081|8082|8083)" || echo "Ports 8080,8081,8082,8083 are not listening"
-elif command -v netstat &> /dev/null; then
-    netstat -tulpn | grep -E ":(8080|8081|8082|8083)" 2>/dev/null || echo "Ports 8080,8081,8082,8083 are not listening"
-else
-    echo "Cannot check ports (neither ss nor netstat is available)"
-fi
-
-echo ""
-echo "✅ Done! Containers are running."
 echo "Getting qbittorrent password from logs..."
 
 # Get password from docker qbittorrent logs
 QBITTORRENT_PASSWORD=$(docker-compose logs qbittorrent 2>/dev/null | grep "The WebUI administrator password was not set" | tail -n1 | sed 's/.*session: //')
 
-QBITTORRENT_PASSWORD:-Not found, check logs manually
+QBITTORRENT_PASSWORD="${QBITTORRENT_PASSWORD:-Not found, check logs manually}"
+
+echo "Getting filebrowser password from logs..."
+
+# Get password from docker filebrowser logs
+FILEBROWSER_PASSWORD=$(docker-compose logs filebrowser 2>/dev/null | grep "User 'admin' initialized with randomly generated password" | tail -n1 | sed 's/.*password: //')
+
+FILEBROWSER_PASSWORD="${FILEBROWSER_PASSWORD:-Not found, check logs manually}"
+
 if [ "$LOCAL_IP" != "Unknown" ] && [ -n "$LOCAL_IP" ]; then
     echo "================================="
     echo "🌐 Network access URLs (clickable):"
@@ -188,20 +148,20 @@ else
     echo "❌ Не удалось определить локальный IP. Проверь сеть."
 fi
 
-echo "⚠️ Временный пароль для входа в qBittorrent: $QBITTORRENT_PASSWORD"
-echo "❌ Если не удалось найти, запусти docker-compose logs qbittorrent и посмотри сам"
-echo "⚠️ СМЕНА ПАРОЛЯ В qbittorrent обязательна, иначе при каждом запуске он будет меняться"
-
 echo ""
 echo "📋 CREDENTIALS:"
 echo "================================="
-echo "FileBrowser, QBittorrent, Piwigo login: $(grep USER_LOGIN .env | cut -d'=' -f2)"
-echo "FileBrowser, QBittorrent, Piwigo password: $(grep USER_PASSWORD .env | cut -d'=' -f2)"
+echo "QBittorrent login: admin"
+echo "QBittorrent password: $QBITTORRENT_PASSWORD"
 echo "---------------------------------"
-echo "DB Root Password: $(grep DB_ROOT_PASS .env | cut -d'=' -f2)"
-echo "DB Piwigo Password: $(grep DB_PASS .env | cut -d'=' -f2)"
+echo "FileBrowser login: admin"
+echo "FileBrowser password: $FILEBROWSER_PASSWORD"
+echo "================================="
+echo "🚨🚨🚨 This passwords are temporary, change it! 🚨🚨🚨"
+echo "---------------------------------"
+echo "DB host: mariadb"
+echo "DB Password: $(grep DB_PASS .env | cut -d'=' -f2)"
 echo "DB Login: $(grep DB_LOGIN .env | cut -d'=' -f2)"
 echo "DB Name: $(grep DB_NAME .env | cut -d'=' -f2)"
 echo "================================="
-echo "⚠️ For PIWIGO use mariadb as host (in settings), piwigo pass and login for db, user and password whatever"
 echo "⚠️  Save these credentials in a secure place!"
