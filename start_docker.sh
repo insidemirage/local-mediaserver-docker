@@ -16,6 +16,7 @@ get_local_ip() {
 
 
 # Function to check internet connection
+# 
 check_internet() {
     echo "🌐 Checking internet connection..."
     if ping -c 1 8.8.8.8 &> /dev/null; then
@@ -177,7 +178,7 @@ if [ "$LOCAL_IP" != "Unknown" ] && [ -n "$LOCAL_IP" ]; then
     echo "🌐 Network access URLs (clickable):"
     echo "================================="
     echo -e "QBittorrent: http://$LOCAL_IP:8080"
-    echo -e "Jellyfin:    http://$LOCAL_IP:8081"
+    echo -e "Jellyfin:    http://$LOCAL_IP:8096"
     echo -e "Piwigo:      http://$LOCAL_IP:8082"
     echo -e "FileBrowser: http://$LOCAL_IP:8083"
     echo "================================="
